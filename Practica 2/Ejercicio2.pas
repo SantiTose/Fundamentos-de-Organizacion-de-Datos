@@ -30,6 +30,7 @@ var
 	regd:producto_vendido;
 	unidades:integer;
 begin
+	reset(det); reset(mae);
 	leer(det,regd);
 	while(regd.cod<>valoralto) do begin
 		read(mae,regm);
@@ -41,14 +42,15 @@ begin
 		regm.actual:=regm.actual-unidades;
 		seek(mae,filepos(mae)-1);
 		write(mae,regm);
-		
 	end;
+	close(mae);close(det);
 end;
 
 procedure listarMinimos(var mae:maestro);
 var
 	texto:Text; regm:producto; nombre:string[20];
 begin
+	reset(mae);
 	writeln('Escribi un nombre para el archivo: '); 
 	readln(nombre);readln(nombre);
 	assign(texto,nombre);
@@ -58,7 +60,7 @@ begin
 		if(regm.actual<regm.minimo)then 
 			writeln(texto,regm.cod,' ',regm.precio,' ',regm.actual,' ',regm.minimo,' ',regm.nombre);
 	end;
-	close(texto);
+	close(texto); close(mae);
 end;
 
 procedure leerProd(var p:producto);
@@ -112,9 +114,7 @@ var
 mae:maestro; det:detalle; op:integer;
 begin
 	assign(det,'Detalle');
-	reset(det);
 	assign(mae,'Maestro');
-	reset(mae);
 	writeln('Elegi la opcion: ');
 	writeln('Op 1 Actualizar');
 	writeln('Op 2 Listar');
@@ -133,5 +133,4 @@ begin
 		writeln('Op 3 Cerrar' );
 		read(op);
 		end;
-	close(det); close(mae);
 end.
